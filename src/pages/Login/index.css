@@ -1,0 +1,43 @@
+.section{
+    margin: auto;
+    background-image: url(https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr);
+    background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: auto;
+}
+.login-container{
+    width:  328px;
+    height: 100%;
+    padding: 32px  24px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-top{ 
+    width: 100%;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-top img{
+    width: 261px;
+    height: 54px;
+}
+.login-top p{
+    margin-top: 0;
+}
+
+.login-form-button{
+    width: 328px;
+}
+
