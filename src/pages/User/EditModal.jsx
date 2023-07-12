@@ -1,58 +1,185 @@
-import React from "react";
-import { Form, Input } from "antd";
+import React, { useRef } from "react";
+import {
+  ProForm,
+  ProFormTextArea,
+  ProFormText,
+  ProFormSelect,
+  // ProFormSubmitter,
+} from "@ant-design/pro-components";
+// import { ProFormSubmitter } from "@ant-design/pro-form";
+import { Skeleton, Button, notification } from "antd";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 
-function EditModal(props) {
+import userApi from "../../Api/userApi";
+
+function EditModal() {
+  const { data, dispatch } = useContext(UserContext);
+  const infor = data?.getUserById;
+  console.log("object in4", infor);
+  let check = data?.id;
+  console.log("object check", check);
+  const handleSubmit = async (value) => {
+    // Thực hiện chức năng của nút "Submit" tại đây
+    !check
+      ? userApi
+          .add(value)
+          .then((response) => {
+            dispatch({ type: "addUser", payload: value });
+            dispatch({ type: "modalClose" });
+
+            if (response?.data?.body?.status === "OK") {
+              notification.success({ message: "Tạo người dùng thành công" });
+            } else {
+              notification.error({
+                message: "Tạo người dùng không thành công",
+              });
+            }
+          })
+          .catch((error) => console.error(error))
+      : userApi
+          .update({ ...value, usrUid: check })
+          .then((response) => {
+            dispatch({ type: "updateUser", payload: value });
+            dispatch({ type: "modalClose" });
+
+            if (response?.data?.body?.status === "OK") {
+              notification.success({
+                message: "Cập nhật người dùng thành công",
+              });
+            } else {
+              notification.error({
+                message: "Cập nhật người dùng không thành công",
+              });
+            }
+          })
+          .catch((error) => console.error(error));
+  };
   return (
-    <div>
-      {/* <Form
-        // form={form}
-        layout="vertical"
-        name="form_in_modal"
-        initialValues={{
-          modifier: "public",
+    <Skeleton loading={!check ? false : !infor ? true : false}>
+      <ProForm
+        initialValues={infor}
+        grid
+        onFinish={(value) => handleSubmit(value)}
+        submitter={{
+          resetButtonProps: false,
+          searchConfig: {
+            submitText: "Xác nhận",
+          },
+          submitButtonProps: {},
+          render: (_, doms) => {
+            const handleCancel = () => {
+              // Thực hiện chức năng của nút "Cancel" tại đây
+              dispatch({ type: "modalClose" });
+              dispatch({ type: "drawerClose" });
+            };
+
+            return (
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  type="default"
+                  onClick={handleCancel}
+                  style={{ marginRight: 10 }}
+                >
+                  Hủy
+                </Button>
+
+                {/* <Button
+                  type="primary"
+                  onClick={handleSubmit}
+                  style={{ marginRight: 10 }}
+                >
+                  Xác nhận
+                </Button> */}
+                {doms}
+              </div>
+            );
+          },
         }}
       >
-        <Form.Item
-          name="title"
-          label="Title"
-          rules={[
-            {
-              required: true,
-              message: "Please input the title of collection!",
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrUsername"
+          label="Tài khoản"
+          rules={[{ required: true, message: "Please!" }]}
+        />
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrEmail"
+          label="Email"
+        />
+        <ProFormSelect
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrStatus"
+          label="Trạng thái"
+          valueEnum={{
+            ACTIVE: {
+              text: "Hoạt động",
+              status: "success",
             },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="description"
-          label="Description"
-          dataIndex="usrUsername"
-        >
-          <Input type="textarea" />
-        </Form.Item>
-        <Form.Item
-          name="modifier"
-          dataIndex="usrUsername"
-          className="collection-create-form_last-form-item"
-        >
-          <Input type="textarea" />
-        </Form.Item>
-      </Form> */}
-      <Form
-      //   labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}
-      >
-        <Form.Item label="First Name" initialValuee="usrUsername">
-          <Input initialValuee={"usrUsername"} />
-        </Form.Item>
-        <Form.Item label="Last Name">
-          <Input disabled />
-        </Form.Item>
-        <Form.Item label="Email">
-          <Input value={"usrUsername"} disabled />
-        </Form.Item>
-      </Form>
-    </div>
+            INACTIVE: {
+              text: "Không hoạt động",
+              status: "error",
+            },
+          }}
+          rules={[{ required: true, message: "Please!" }]}
+        />
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrLastName"
+          label="Họ"
+        />
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrFirstName"
+          label="Tên"
+        />
+        <ProFormTextArea
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrPosition"
+          label="Phòng ban"
+        />
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrPhone"
+          label="Số điện thoại"
+          // rules={[{ required: true, message: "Please!" }]}
+        />
+        <ProFormSelect
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrStatus"
+          label="Nhóm nghiệp vụ"
+          rules={[{ required: true, message: "Please!" }]}
+        />
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrJob"
+          label="Công việc"
+          // rules={[{ required: true, message: "Please!" }]}
+        />
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="usrLocation"
+          label="Khu vực"
+        />
+        <ProFormText
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="grpName"
+          label="Nhóm"
+        />
+      </ProForm>
+    </Skeleton>
   );
 }
 

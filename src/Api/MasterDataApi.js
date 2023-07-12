@@ -1,17 +1,16 @@
 import axiosClient from "./axiosClient";
 import {
   requestHeaderApiBase,
-  requestEnquiry,
   requestTransaction,
-  searchDataInfo,
+  requestEnquiryMDT,
 } from "../utils";
 import { TICKETING_BASE_URL } from "../config/constant";
 
-const userApi = {
+const masterDataApi = {
   async getAll(params) {
     return axiosClient.post(
       TICKETING_BASE_URL,
-      requestEnquiry("getUsers", { searchDataInfo: searchDataInfo }),
+      requestEnquiryMDT("getMasterDataByType", { type: "ContentSuggest" }),
       {
         headers: requestHeaderApiBase,
       }
@@ -21,7 +20,7 @@ const userApi = {
   async get(id) {
     return await axiosClient.post(
       TICKETING_BASE_URL,
-      requestEnquiry("getUserById", { usrUid: id }),
+      requestEnquiryMDT("getUserById", { usrUid: id }),
       {
         headers: requestHeaderApiBase,
       }
@@ -55,4 +54,4 @@ const userApi = {
   },
 };
 
-export default userApi;
+export default masterDataApi;

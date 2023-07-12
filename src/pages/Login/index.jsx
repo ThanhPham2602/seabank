@@ -3,58 +3,34 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Tabs, notification } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "./index.css";
-import axios from "axios";
+import Cookies from "js-cookie";
+import authenApi from "../../Api/authenApi";
 // import axios from "axios";
 
 function IndexLogin() {
   const navigate = useNavigate();
   const onFinish = async (data) => {
     console.log("data:: ", data);
-    const res = await axios.post(
-      "https://gwextdev.seabank.com.vn/seabank/seabank-external/api/v1/ticketing/tttn/feticketing/process",
-      {
-        body: {
-          command: "Get_TRANSACION",
-          transaction: {
-            authenType: "get_token",
-            userName: data?.username,
-            passWord: data?.password,
-          },
-        },
-        header: {
-          api: "TTTN_TICKETING_API",
-          apiKey: "MS13276ZIDANDWYSB2Cl89VARNAAH",
-          channel: "Ticketing",
-          context: "PC",
-          location: "10.9.12.90",
-          priority: "1",
-          reqType: "REQUEST",
-          requestAPI: "t24Server",
-          requestNode: "10.9.10.14",
-          subChannel: "VHT",
-          synasyn: "true",
-          trusted: "false",
-          userID: "1365778600",
-        },
-      },
-      {
-        headers: {
-          "X-Ibm-Client-Id": "e71a73007d4f0621989a1c83f44ff9be",
-          "X-Ibm-Client-Secret": "cc40a9b637f745a4d042850b1e89fdd5",
-        },
-      }
-    );
-    sessionStorage.setItem(
-      "accessToken",
-      res?.data?.body?.dataRes?.accessToken
-    );
-    console.log("res:: ", res);
-    if (res?.data?.body?.status === "OK") {
-      navigate("/system/user");
-      notification.success({ message: "Đăng nhập thành công" });
-    } else {
-      notification.error({ message: "Đăng nhập không thành công" });
-    }
+
+    authenApi
+      .login(data?.username, data?.password)
+      .then((res) => {
+        Cookies.set("access_token", res?.data?.body?.dataRes?.accessToken);
+        // sessionStorage.setItem(
+        //   "accessToken",
+        //   res?.data?.body?.dataRes?.accessToken
+        // );
+
+        if (res?.data?.body?.status === "OK") {
+          navigate("/system/user");
+          notification.success({ message: "Đăng nhập thành công" });
+        } else {
+          notification.error({ message: "Đăng nhập không thành công" });
+        }
+      })
+      .catch((err) => {
+        notification.error({ message: err.toString?.() });
+      });
   };
 
   const items: TabsProps["items"] = [

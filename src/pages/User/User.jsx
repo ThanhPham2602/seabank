@@ -12,11 +12,16 @@ import {
   // ProFormSwitch,
   // Search,
 } from "@ant-design/pro-components";
-import { Button, Dropdown, Select, Space, Tag } from "antd";
+import { Button } from "antd";
 import { useRef, useContext } from "react";
 import { UserContext } from "./UserContext";
 // import axios from "axios";
-import { columns } from "./columnUser";
+import { Columns } from "./columnUser";
+import { useEffect } from "react";
+import userApi from "../../Api/userApi";
+import UserModal from "./UserModal";
+import DrawerUser from "./Drawer";
+import masterDataApi from "../../Api/MasterDataApi";
 
 export const waitTimePromise = async (time = 100) => {
   return new Promise((resolve) => {
@@ -32,100 +37,78 @@ export const waitTime = async (time = 100) => {
 
 const User = () => {
   const actionRef = useRef();
-  // console.log("object data", data);
-  const { userData } = useContext(UserContext);
-  console.log("object userData", userData);
+  const { data, dispatch } = useContext(UserContext);
 
-  const handleSearch = (value) => {
-    console.log("Từ khóa tìm kiếm:", value);
-    // Xử lý tìm kiếm dữ liệu tại đây
-  };
+  useEffect(() => {
+    userApi
+      .getAll()
+      .then((response) => {
+        // console.log("object res", response.data.body.dataRes.rows);
+        const data = response.data.body.dataRes.rows;
+        dispatch({ type: "getAllUser", payload: data });
+        // setData(newData)
+      })
+      .catch((error) => console.error(error));
+    masterDataApi
+      .getAll()
+      .then((response) => {
+        const data2 = response.data.body.dataRes.ContentSuggest;
+        console.log("object data2", data2);
+        dispatch({ type: "getAllMDT", payload: data2 });
+      })
+      .catch((error) => console.error(error));
+  }, [dispatch]);
 
   return (
-    <ProTable
-      columns={columns}
-      actionRef={actionRef}
-      cardBordered
-      dataSource={userData}
-      request={async (params, sort, filter) => {
-        console.log(sort, filter);
-        console.log("object params", params);
-        const response = await {
-          page: params.current,
-          pageSize: params.pageSize,
-        };
-        // await waitTime(1000);
-        // console.log("accesstoken", sessionStorage.getItem("accessToken"));
-        return { data: response.result, success: Boolean, total: Number };
-      }}
-      search={{
-        filterType: "light",
-        placeholder: "Tìm kiếm",
-        onSearch: handleSearch,
-        // onReset: handleReset,
-        // searchText: "Tìm",
-        // resetText: "Đặt lại",
-        // enterButtonText: "Tìm",
-        // resetButtonProps: {
-        //   icon: <ReloadOutlined />,
-        // },
-        // submitButtonProps: {
-        //   icon: <SearchOutlined />,
-        // },
-      }}
-      scroll={{ x: "1000px" }}
-      editable={{
-        type: "multiple",
-      }}
-      // columnsState={{
-      //   persistenceKey: "pro-table-singe-demos",
-      //   persistenceType: "localStorage",
-      //   onChange(value) {
-      //     // console.log("value: ", value);
-      //   },
-      // }}
-      rowKey="usrUid"
-      search={{
-        labelWidth: "auto",
-      }}
-      searchText
-      options={{
-        setting: {
-          listsHeight: 400,
-        },
-      }}
-      // form={{
-      //   syncToUrl: (values, type) => {
-      //     if (type === "get") {
-      //       return {
-      //         ...values,
-      //         created_at: [values.startTime, values.endTime],
-      //       };
-      //     }
-      //     return values;
-      //   },
-      // }}
-      pagination={{
-        pageSizeOptions: ["10", "20", "50", "100"],
-        pageSize: "10",
-        // onChange: (page) => console.log(page),
-      }}
-      dateFormatter="string"
-      headerTitle="Danh sách người dùng"
-      toolBarRender={() => [
-        // <Search />,
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            actionRef.current?.reload();
-          }}
-          type="primary"
-        >
-          Tạo người dùng
-        </Button>,
-      ]}
-    />
+    <>
+      <ProTable
+        columns={Columns()}
+        actionRef={actionRef}
+        cardBordered
+        dataSource={data.getAllUser}
+        request={async (params, sort, filter) => {
+          // actionRef.current?.reload();
+          console.log("object params", params);
+          const response = await userApi.getAll(params, sort, filter);
+          console.log("object res", response);
+          return { data: response.result, success: true };
+        }}
+        scroll={{ x: "1000px" }}
+        editable={{
+          type: "multiple",
+        }}
+        rowKey="usrUid"
+        search={{
+          labelWidth: "auto",
+        }}
+        searchText
+        options={{
+          setting: {
+            listsHeight: 400,
+          },
+        }}
+        pagination={{
+          pageSizeOptions: ["10", "20", "50", "100"],
+          pageSize: "10",
+        }}
+        dateFormatter="string"
+        headerTitle="Danh sách người dùng"
+        toolBarRender={() => [
+          <Button
+            key="button"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              dispatch({ type: "modalOpen" });
+            }}
+            type="primary"
+          >
+            Tạo người dùng
+          </Button>,
+        ]}
+      />
+      <DrawerUser />
+      <UserModal />
+    </>
   );
 };
 

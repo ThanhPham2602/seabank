@@ -1,29 +1,36 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Drawer } from "antd";
+import { UserContext } from "./UserContext";
+import userApi from "../../Api/userApi";
+import EditDrawer from "./EditDrawer";
 
-function DrawerUser(props) {
-  const [open, setOpen] = useState(false);
-  const showDrawer = () => {
-    setOpen(true);
-  };
+function DrawerUser() {
+  const { data, dispatch } = useContext(UserContext);
+
+  const id = data.userID;
+
+  useEffect(() => {
+    userApi
+      .get(id)
+      .then((response) => {
+        // console.log("response", response);
+        dispatch({
+          type: "getUserById",
+          payload: response.data.body.dataRes,
+        });
+      })
+      .catch((error) => console.error(error));
+  }, [id]);
+
   const onClose = () => {
-    setOpen(false);
+    dispatch({ type: "drawerClose" });
   };
   return (
-    <>
-      <Button type="primary" onClick={showDrawer} />
-
-      <Drawer
-        title="Basic Drawer"
-        placement="right"
-        onClose={onClose}
-        open={open}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+    <div>
+      <Drawer placement="right" onClose={onClose} open={data.drawerOpen}>
+        <EditDrawer />
       </Drawer>
-    </>
+    </div>
   );
 }
 

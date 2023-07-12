@@ -1,50 +1,44 @@
-import React, { useState } from "react";
-import { Button, Modal } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import React, { useContext, useEffect } from "react";
+import { Modal } from "antd";
+// import { EditOutlined } from "@ant-design/icons";
 import EditModal from "./EditModal";
+import userApi from "../../Api/userApi";
+import { UserContext } from "./UserContext";
 
 const UserModal = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data, dispatch } = useContext(UserContext);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const id = data.userID;
+  const check = data.id;
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+  useEffect(() => {
+    userApi
+      .get(id)
+      .then((response) => {
+        // console.log("object res", response.data.body.dataRes);
+        dispatch({
+          type: "getUserById",
+          payload: response.data.body.dataRes,
+        });
+      })
+      .catch((error) => console.error(error));
+    // dispatch({ type: "modalOpen", payload: id });
+  }, [id]);
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    dispatch({ type: "modalClose" });
+    dispatch({ type: "setUserID", payload: undefined });
   };
 
   return (
     <>
-      {/* <Button
-        type="primary"
-        onClick={showModal}
-        // icon={<EditOutlined />}
-        style={{
-          backgroundColor: "white",
-          color: "black",
-          border: "1px solid ",
-          width: "32px",
-        }}
-      >
-        <EditOutlined />
-      </Button> */}
-      <Button
-        key="editable"
-        style={{ width: "32px", padding: "0" }}
-        onClick={showModal}
-        icon={<EditOutlined />}
-      ></Button>
-
       <Modal
-        title="Cập nhật người dùng"
-        open={isModalOpen}
-        onOk={handleOk}
+        width={"800px"}
+        title={check ? "Cập nhật người dùng" : "Tạo mới người dùng"}
+        open={data.modalOpen}
+        destroyOnClose
         onCancel={handleCancel}
+        footer={null}
       >
         <EditModal />
       </Modal>
