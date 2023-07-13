@@ -55,10 +55,10 @@ export const requestHeaderApiCore = {
   "X-IBM-Client-Secret": TICKETING_CORE_URL_IBM_CLIENT_SECRET,
 };
 
-export const searchDataInfo = {
+export const searchDataInfo = ({ params }) => ({
   paginatorInfo: {
-    page: 1,
-    pageSize: 250,
+    page: params.page,
+    pageSize: params.pageSize,
   },
   filterInfo: {
     searchValue: "",
@@ -69,21 +69,4 @@ export const searchDataInfo = {
     sortColumn: "usr_create_date",
     direction: "desc",
   },
-};
-
-export const dataReq = {
-  usrUsername: "",
-  usrFirstName: "",
-  usrLastName: "",
-  usrEmail: "",
-  usrPosition: "",
-  usrPhone: "",
-  depUId: "",
-  id: "",
-  grpUid: "",
-  usrRole: "",
-  usrJob: "",
-  typeBusiness: "",
-  usrStatus: "",
-  usrUid: "",
-};
+});

@@ -20,7 +20,7 @@ function DrawerUser() {
         });
       })
       .catch((error) => console.error(error));
-  }, [id]);
+  }, []);
 
   const onClose = () => {
     dispatch({ type: "drawerClose" });

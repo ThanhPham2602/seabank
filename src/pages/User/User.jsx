@@ -38,10 +38,10 @@ export const waitTime = async (time = 100) => {
 const User = () => {
   const actionRef = useRef();
   const { data, dispatch } = useContext(UserContext);
-
+  console.log(" datttttttttttt", data);
   useEffect(() => {
     userApi
-      .getAll()
+      .getAll({ page: 1, pageSize: 10 })
       .then((response) => {
         // console.log("object res", response.data.body.dataRes.rows);
         const data = response.data.body.dataRes.rows;
@@ -49,15 +49,20 @@ const User = () => {
         // setData(newData)
       })
       .catch((error) => console.error(error));
-    masterDataApi
-      .getAll()
-      .then((response) => {
-        const data2 = response.data.body.dataRes.ContentSuggest;
-        console.log("object data2", data2);
-        dispatch({ type: "getAllMDT", payload: data2 });
-      })
-      .catch((error) => console.error(error));
-  }, [dispatch]);
+    // masterDataApi
+    //   .getAll()
+    //   .then((response) => {
+    //     const data2 = response.data.body.dataRes.ContentSuggest;
+    //     console.log("object data2", data2);
+    //     dispatch({ type: "getAllMDT", payload: data2 });
+    //   })
+    //   .catch((error) => console.error(error));
+  }, []);
+
+  const handleSearch = (value) => {
+    console.log("object value::", value);
+    actionRef.current?.reload({ searchText: value });
+  };
 
   return (
     <>
@@ -65,13 +70,20 @@ const User = () => {
         columns={Columns()}
         actionRef={actionRef}
         cardBordered
-        dataSource={data.getAllUser}
+        dataSource={data.getAllUser?.rows}
         request={async (params, sort, filter) => {
           // actionRef.current?.reload();
           console.log("object params", params);
-          const response = await userApi.getAll(params, sort, filter);
-          console.log("object res", response);
-          return { data: response.result, success: true };
+          console.log("object sort", sort);
+          console.log("object filter", filter);
+
+          const response = await userApi.getAll({
+            page: params.current,
+            pageSize: params.pageSize,
+          });
+          const data = response?.data?.body?.dataRes;
+          dispatch({ type: "getAllUser", payload: data });
+          return { data: data, success: true };
         }}
         scroll={{ x: "1000px" }}
         editable={{
@@ -81,6 +93,7 @@ const User = () => {
         search={{
           labelWidth: "auto",
         }}
+        onSearch={handleSearch}
         searchText
         options={{
           setting: {
@@ -89,7 +102,9 @@ const User = () => {
         }}
         pagination={{
           pageSizeOptions: ["10", "20", "50", "100"],
-          pageSize: "10",
+          // pageSize: "10",
+          defaultPageSize: 10,
+          total: data.getAllUser?.totalRecord,
         }}
         dateFormatter="string"
         headerTitle="Danh sách người dùng"

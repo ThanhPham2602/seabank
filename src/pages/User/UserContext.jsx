@@ -5,7 +5,12 @@ import React, { createContext, useReducer } from "react";
 
 export const UserContext = createContext();
 
-const initialData = { modalOpen: false, drawerOpen: false, userID: null };
+const initialData = {
+  modalOpen: false,
+  drawerOpen: false,
+  userID: null,
+  // setSttActive: true,
+};
 const reducer = (state, action) => {
   // console.log("object payload", action.payload);
   // console.log("object state", state);
@@ -20,6 +25,9 @@ const reducer = (state, action) => {
       return { ...state, addUser: action.payload };
 
     case "updateUser":
+      return { ...state };
+
+    case "inActiveUser":
       return { ...state };
 
     case "removeUser":
@@ -42,6 +50,12 @@ const reducer = (state, action) => {
 
     case "getAllMDT":
       return { ...state, getAllMDT: action.payload };
+
+    // case "setSttInActive":
+    //   return { ...state, setSttActive: false, userID: action.payload };
+
+    // case "setSttActive":
+    //   return { ...state, setSttActive: true, userID: action.payload };
 
     default:
       return state;

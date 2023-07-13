@@ -1,14 +1,39 @@
 import { EditOutlined } from "@ant-design/icons";
 // import DrawerUser from "./Drawer";
 import { ProFormSwitch } from "@ant-design/pro-components";
-import UserModal from "./UserModal";
+// import UserModal from "./UserModal";
 import Link from "antd/es/typography/Link";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import { Button } from "antd";
+import { Button, notification, Switch } from "antd";
+import userApi from "../../Api/userApi";
 
 export const Columns = () => {
   const { data, dispatch } = useContext(UserContext);
+  // console.log("object data", data?.getAllUser);
+  // const UserList = data.getAllUser;
+  const handleStatusChange = (usrUid, usrStatus, checked) => {
+    const newStatus = usrStatus ? "ACTIVE" : "INACTIVE";
+    console.log("object  userLisst", usrUid);
+    console.log(" checked", usrStatus);
+    // const index = UserList.findIndex((id) => usrUid === id);
+
+    userApi
+      .update({ ...usrStatus, usrUid: usrUid })
+      .then((response) => {
+        dispatch({ type: "updateUser", payload: newStatus });
+        if (response?.data?.body?.status === "OK") {
+          notification.success({
+            message: "Cập nhật thành công",
+          });
+        } else {
+          notification.error({
+            message: "Cập nhật không thành công",
+          });
+        }
+      })
+      .catch((error) => console.error(error));
+  };
 
   return [
     {
@@ -28,19 +53,15 @@ export const Columns = () => {
       render: (_, record) => (
         <Link
           onClick={() => {
-            // DrawerUser(record.usrUid);
             dispatch({ type: "drawerOpen", payload: record.usrUid });
-            // console.log(" record.usrUid", record.usrUid);
-            // console.log("dataUid", data);
           }}
-          // id={record.usrUid}
         >
           {record.usrUsername}
         </Link>
       ),
     },
     {
-      disable: true,
+      // disable: true,
       title: "Trạng thái",
       dataIndex: "usrStatus",
       filters: true,
@@ -136,12 +157,6 @@ export const Columns = () => {
             // boxShadow: "0 2px 4px rgba(0, 0, 0, 1)",
           }}
         >
-          {/* <UserModal
-            key="editable"
-            noStyle
-            id={record.usrUid}
-            style={{ width: "32px", height: "32px", padding: "0" }}
-          /> */}
           <Button
             key="editable"
             style={{ width: "32px", padding: "0" }}
@@ -152,10 +167,13 @@ export const Columns = () => {
             icon={<EditOutlined />}
           />
 
-          <ProFormSwitch
+          <Switch
             key={"switch"}
-            noStyle
-            initialValue={record.usrStatus}
+            defaultChecked={record.usrStatus === "ACTIVE"}
+            // checked={ === "ACTIVE"}
+            onChange={(checked) =>
+              handleStatusChange(record.usrUid, record.usrStatus, checked)
+            }
           />
         </div>,
       ],
