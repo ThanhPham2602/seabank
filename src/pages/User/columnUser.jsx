@@ -12,16 +12,20 @@ export const Columns = () => {
   const { data, dispatch } = useContext(UserContext);
   // console.log("object data", data?.getAllUser);
   // const UserList = data.getAllUser;
-  const handleStatusChange = (usrUid, usrStatus, checked) => {
-    const newStatus = usrStatus ? "ACTIVE" : "INACTIVE";
-    console.log("object  userLisst", usrUid);
-    console.log(" checked", usrStatus);
-    // const index = UserList.findIndex((id) => usrUid === id);
+  const handleStatusChange = (usrUid, checked) => {
+    const newStatus = checked ? "ACTIVE" : "INACTIVE";
+    console.log("object newstt", newStatus);
+    console.log("object  userUid", usrUid);
+    console.log(" checked", checked);
 
     userApi
-      .update({ ...usrStatus, usrUid: usrUid })
+      .inActiveUser(usrUid, newStatus)
       .then((response) => {
-        dispatch({ type: "updateUser", payload: newStatus });
+        dispatch({
+          type: "inActiveUser",
+          // usrUid: usrUid,
+          // usrStatus: newStatus,
+        });
         if (response?.data?.body?.status === "OK") {
           notification.success({
             message: "Cập nhật thành công",
@@ -171,9 +175,7 @@ export const Columns = () => {
             key={"switch"}
             defaultChecked={record.usrStatus === "ACTIVE"}
             // checked={ === "ACTIVE"}
-            onChange={(checked) =>
-              handleStatusChange(record.usrUid, record.usrStatus, checked)
-            }
+            onChange={(checked) => handleStatusChange(record.usrUid, checked)}
           />
         </div>,
       ],

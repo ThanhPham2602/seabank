@@ -23,22 +23,22 @@ import UserModal from "./UserModal";
 import DrawerUser from "./Drawer";
 import masterDataApi from "../../Api/MasterDataApi";
 
-export const waitTimePromise = async (time = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, 100);
-  });
-};
+// export const waitTimePromise = async (time = 100) => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(true);
+//     }, 100);
+//   });
+// };
 
-export const waitTime = async (time = 100) => {
-  await waitTimePromise(time);
-};
+// export const waitTime = async (time = 100) => {
+//   await waitTimePromise(time);
+// };
 
 const User = () => {
   const actionRef = useRef();
   const { data, dispatch } = useContext(UserContext);
-  console.log(" datttttttttttt", data);
+
   useEffect(() => {
     userApi
       .getAll({ page: 1, pageSize: 10 })
@@ -49,20 +49,29 @@ const User = () => {
         // setData(newData)
       })
       .catch((error) => console.error(error));
-    // masterDataApi
-    //   .getAll()
-    //   .then((response) => {
-    //     const data2 = response.data.body.dataRes.ContentSuggest;
-    //     console.log("object data2", data2);
-    //     dispatch({ type: "getAllMDT", payload: data2 });
-    //   })
-    //   .catch((error) => console.error(error));
+    masterDataApi
+      .getAll()
+      .then((response) => {
+        const data2 = response.data.body.dataRes;
+        console.log("object data2", data2);
+        dispatch({ type: "getAllMDT", payload: data2 });
+      })
+      .catch((error) => console.error(error));
+
+    masterDataApi
+      .getGroups({ page: 1, pageSize: 10 })
+      .then((response) => {
+        const data3 = response.data.body.dataRes.rows;
+        console.log("object data3", data3);
+        dispatch({ type: "getGroups", payload: data3 });
+      })
+      .catch((error) => console.error(error));
   }, []);
 
-  const handleSearch = (value) => {
-    console.log("object value::", value);
-    actionRef.current?.reload({ searchText: value });
-  };
+  // const handleSearch = (value) => {
+  //   console.log("object value::", value);
+  //   actionRef.current?.reload({ searchText: value });
+  // };
 
   return (
     <>
@@ -72,9 +81,8 @@ const User = () => {
         cardBordered
         dataSource={data.getAllUser?.rows}
         request={async (params, sort, filter) => {
-          // actionRef.current?.reload();
           console.log("object params", params);
-          console.log("object sort", sort);
+          // console.log("object sort", sort);
           console.log("object filter", filter);
 
           const response = await userApi.getAll({
@@ -93,7 +101,7 @@ const User = () => {
         search={{
           labelWidth: "auto",
         }}
-        onSearch={handleSearch}
+        // onSearch={handleSearch}
         searchText
         options={{
           setting: {

@@ -14,6 +14,23 @@ export const HEADER_REQUEST_DEFAULT = {
   userID: "1365778600",
 };
 
+export const HEADER_REQUEST_DEFAULT2 = {
+  api: "TTTN_TICKETING_API",
+  apiKey: "MS13276ZIDANDWYSB2Cl89VARNAAH",
+  channel: "Ticketing",
+  context: "PC",
+  location: "10.9.12.90",
+  priority: 1,
+  reqType: "REQUEST",
+  requestAPI: "t24Server",
+  requestNode: "10.9.10.14",
+  requestXde: "10.9.10.14",
+  subChannel: "VHT",
+  synasyn: true,
+  trusted: "false",
+  userID: "1365778600",
+};
+
 export const HEADER_REQUEST_MDT_DEFAULT = {
   api: "TTTN_TICKETING_API",
   apiKey: "MS13276ZIDANDWYSB2Cl89VARNAAH",

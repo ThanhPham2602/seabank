@@ -1,5 +1,6 @@
 import {
   HEADER_REQUEST_DEFAULT,
+  HEADER_REQUEST_DEFAULT2,
   HEADER_REQUEST_MDT_DEFAULT,
   TICKETING_BASE_URL_IBM_CLIENT_ID,
   TICKETING_BASE_URL_IBM_CLIENT_SECRET,
@@ -34,7 +35,7 @@ export const requestEnquiryMDT = (authenType, data = {}) => {
 
 export const requestTransaction = (authenType, data = {}) => {
   return {
-    header: HEADER_REQUEST_DEFAULT,
+    header: HEADER_REQUEST_DEFAULT2,
     body: {
       command: "GET_TRANSACTION",
       transaction: {

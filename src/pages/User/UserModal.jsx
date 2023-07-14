@@ -22,7 +22,6 @@ const UserModal = () => {
         });
       })
       .catch((error) => console.error(error));
-    // dispatch({ type: "modalOpen", payload: id });
   }, [id]);
 
   const handleCancel = () => {

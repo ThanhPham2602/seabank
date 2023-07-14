@@ -51,11 +51,8 @@ const reducer = (state, action) => {
     case "getAllMDT":
       return { ...state, getAllMDT: action.payload };
 
-    // case "setSttInActive":
-    //   return { ...state, setSttActive: false, userID: action.payload };
-
-    // case "setSttActive":
-    //   return { ...state, setSttActive: true, userID: action.payload };
+    case "getGroups":
+      return { ...state, getGroups: action.payload };
 
     default:
       return state;

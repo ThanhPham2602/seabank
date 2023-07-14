@@ -18,6 +18,7 @@ function App() {
       children: MyDefault.route.routes,
     },
   ]);
+
   return <RouterProvider router={router} />;
 }
 

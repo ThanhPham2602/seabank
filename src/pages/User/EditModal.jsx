@@ -15,10 +15,13 @@ import userApi from "../../Api/userApi";
 
 function EditModal() {
   const { data, dispatch } = useContext(UserContext);
+
+  console.log("object data", data);
   const infor = data?.getUserById;
-  console.log("object in4", infor);
+  const SelectData = data?.getAllMDT?.TypeBusiness;
+  const SelectData2 = data?.getGroups;
   let check = data?.id;
-  console.log("object check", check);
+
   const handleSubmit = async (value) => {
     // Thực hiện chức năng của nút "Submit" tại đây
     !check
@@ -42,7 +45,7 @@ function EditModal() {
           .then((response) => {
             dispatch({ type: "updateUser", payload: value });
             dispatch({ type: "modalClose" });
-
+            console.log("object val", value);
             if (response?.data?.body?.status === "OK") {
               notification.success({
                 message: "Cập nhật người dùng thành công",
@@ -155,28 +158,47 @@ function EditModal() {
         <ProFormSelect
           colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
           width="md"
-          name="usrStatus"
           label="Nhóm nghiệp vụ"
-          rules={[{ required: true, message: "Please!" }]}
+          // request={async () => [
+          //   { label: "description", value: "defaultValue" },
+          // ]}
+
+          options={SelectData.map((value) => {
+            return {
+              value: value.masterId,
+              label: value.name,
+            };
+          })}
+          rules={[{ required: true, message: "Please select!" }]}
+        />
+        <ProFormSelect
+          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
+          width="md"
+          name="grpName"
+          label="Nhóm"
+          // request={async () => [
+          //   { label: "description", value: "defaultValue" },
+          // ]}
+          initialValue={infor}
+          options={SelectData2.map((value) => {
+            return {
+              value: value.grpUid,
+              label: value.grpName,
+            };
+          })}
+          rules={[{ required: true, message: "Please select!" }]}
         />
         <ProFormText
           colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
           width="md"
           name="usrJob"
           label="Công việc"
-          // rules={[{ required: true, message: "Please!" }]}
         />
         <ProFormText
           colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
           width="md"
           name="usrLocation"
           label="Khu vực"
-        />
-        <ProFormText
-          colProps={{ lg: 8, md: 8, sm: 8, xs: 24 }}
-          width="md"
-          name="grpName"
-          label="Nhóm"
         />
       </ProForm>
     </Skeleton>

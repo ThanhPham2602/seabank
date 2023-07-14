@@ -1,8 +1,11 @@
 import axiosClient from "./axiosClient";
 import {
   requestHeaderApiBase,
-  requestTransaction,
+  // requestTransaction,
+  requestEnquiry,
+  requestHeaderApiCore,
   requestEnquiryMDT,
+  searchDataInfo,
 } from "../utils";
 import { TICKETING_BASE_URL } from "../config/constant";
 
@@ -10,45 +13,22 @@ const masterDataApi = {
   async getAll(params) {
     return axiosClient.post(
       TICKETING_BASE_URL,
-      requestEnquiryMDT("getMasterDataByType", { type: "ContentSuggest" }),
+      requestEnquiryMDT("getMasterDataByType", { type: "TypeBusiness" }),
       {
         headers: requestHeaderApiBase,
       }
     );
   },
 
-  async get(id) {
-    return await axiosClient.post(
-      TICKETING_BASE_URL,
-      requestEnquiryMDT("getUserById", { usrUid: id }),
-      {
-        headers: requestHeaderApiBase,
-      }
-    );
-  },
-
-  async add(data) {
-    return await axiosClient.post(
-      TICKETING_BASE_URL,
-      requestTransaction("createUser", { data: data }),
-      { headers: requestHeaderApiBase }
-    );
-  },
-
-  async update(data) {
-    return await axiosClient.post(
-      TICKETING_BASE_URL,
-      requestTransaction("updateUser", { data: data }),
-      { headers: requestHeaderApiBase }
-    );
-  },
-
-  async remove(id) {
+  async getGroups(params) {
+    console.log(1);
     return axiosClient.post(
       TICKETING_BASE_URL,
-      requestTransaction("getUserById", { usrUid: id }),
+      requestEnquiry("getCoreGroup", {
+        searchDataInfo: searchDataInfo({ params }),
+      }),
       {
-        headers: requestHeaderApiBase,
+        headers: requestHeaderApiCore,
       }
     );
   },
