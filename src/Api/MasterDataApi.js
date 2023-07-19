@@ -21,7 +21,7 @@ const masterDataApi = {
   },
 
   async getGroups(params) {
-    console.log(1);
+    // console.log(1);
     return axiosClient.post(
       TICKETING_BASE_URL,
       requestEnquiry("getCoreGroup", {

@@ -27,7 +27,12 @@ function DrawerUser() {
   };
   return (
     <div>
-      <Drawer placement="right" onClose={onClose} open={data.drawerOpen}>
+      <Drawer
+        placement="right"
+        size="large"
+        onClose={onClose}
+        open={data.drawerOpen}
+      >
         <EditDrawer />
       </Drawer>
     </div>

@@ -41,7 +41,7 @@ const userApi = {
   async add(data) {
     return await axiosClient.post(
       TICKETING_BASE_URL,
-      requestTransaction("createUser", { data: data }),
+      requestTransaction("createUser", { dataReq: data }),
       { headers: requestHeaderApiBase }
     );
   },
@@ -49,7 +49,7 @@ const userApi = {
   async update(data) {
     return await axiosClient.post(
       TICKETING_BASE_URL,
-      requestTransaction("updateUser", { data: data }),
+      requestTransaction("updateUser", { dataReq: data }),
       { headers: requestHeaderApiBase }
     );
   },

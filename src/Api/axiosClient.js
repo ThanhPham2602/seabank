@@ -68,15 +68,6 @@ axiosClient.interceptors.response.use(
     return response;
   },
   function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    // console.log("object error", error);
-    // if (error.response.status === 669) {
-    //   // Access token hết hiệu lực, chuyển hướng về trang đăng nhập
-
-    //   const navigate = useNavigate();
-    //   navigate("/login");
-    // }
     return Promise.reject(error);
   }
 );

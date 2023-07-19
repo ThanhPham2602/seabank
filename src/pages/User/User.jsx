@@ -12,7 +12,7 @@ import {
   // ProFormSwitch,
   // Search,
 } from "@ant-design/pro-components";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 import { useRef, useContext } from "react";
 import { UserContext } from "./UserContext";
 // import axios from "axios";
@@ -22,18 +22,6 @@ import userApi from "../../Api/userApi";
 import UserModal from "./UserModal";
 import DrawerUser from "./Drawer";
 import masterDataApi from "../../Api/MasterDataApi";
-
-// export const waitTimePromise = async (time = 100) => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(true);
-//     }, 100);
-//   });
-// };
-
-// export const waitTime = async (time = 100) => {
-//   await waitTimePromise(time);
-// };
 
 const User = () => {
   const actionRef = useRef();
@@ -68,11 +56,6 @@ const User = () => {
       .catch((error) => console.error(error));
   }, []);
 
-  // const handleSearch = (value) => {
-  //   console.log("object value::", value);
-  //   actionRef.current?.reload({ searchText: value });
-  // };
-
   return (
     <>
       <ProTable
@@ -82,15 +65,23 @@ const User = () => {
         dataSource={data.getAllUser?.rows}
         request={async (params, sort, filter) => {
           console.log("object params", params);
-          // console.log("object sort", sort);
           console.log("object filter", filter);
-
-          const response = await userApi.getAll({
+          const filtersData = {
+            keyword: params.keyword,
             page: params.current,
             pageSize: params.pageSize,
-          });
+            usrUsername: params.usrUsername,
+            usrStatus: params.usrStatus,
+            usrEmail: params.usrEmail,
+            usrPhone: params.usrPhone,
+            grpCode: params.grpCode,
+            code: params.code,
+          };
+
+          const response = await userApi.getAll(filtersData);
           const data = response?.data?.body?.dataRes;
           dispatch({ type: "getAllUser", payload: data });
+          // console.log("object datareturn", data);
           return { data: data, success: true };
         }}
         scroll={{ x: "1000px" }}
@@ -99,35 +90,67 @@ const User = () => {
         }}
         rowKey="usrUid"
         search={{
-          labelWidth: "auto",
+          labelWidth: "120",
         }}
-        // onSearch={handleSearch}
         searchText
         options={{
-          setting: {
-            listsHeight: 400,
-          },
+          // setting: {
+          //   listsHeight: 300,
+          // },
+          search: true,
         }}
         pagination={{
           pageSizeOptions: ["10", "20", "50", "100"],
           // pageSize: "10",
           defaultPageSize: 10,
           total: data.getAllUser?.totalRecord,
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} trên ${total} người dùng`,
         }}
         dateFormatter="string"
         headerTitle="Danh sách người dùng"
-        toolBarRender={() => [
-          <Button
-            key="button"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              dispatch({ type: "modalOpen" });
-            }}
-            type="primary"
-          >
-            Tạo người dùng
-          </Button>,
-        ]}
+        // toolBarRender={() => [
+        //   <Input.Search
+        //     key="search"
+        //     placeholder="Nhập từ khóa"
+        //     onSearch={handleSearch}
+        //   />,
+        //   <Button
+        //     key="button"
+        //     icon={<PlusOutlined />}
+        //     onClick={() => {
+        //       dispatch({ type: "modalOpen" });
+        //     }}
+        //     type="primary"
+        //   >
+        //     Tạo người dùng
+        //   </Button>,
+        // ]}
+
+        toolbar={{
+          // search: {
+          //   placeholder: "Nhập từ khóa để tìm kiếm...",
+          //   style: {
+          //     width: "200px",
+          //   },
+          // onSearch: (value) => {
+          //   handleSearch(value);
+          // },
+          // },
+          actions: [
+            <Button
+              key="button"
+              style={{ backgroundColor: "#FF4D4F" }}
+              icon={<PlusOutlined />}
+              onClick={() => {
+                dispatch({ type: "modalOpen" });
+              }}
+              type="primary"
+            >
+              Tạo người dùng
+            </Button>,
+          ],
+        }}
       />
       <DrawerUser />
       <UserModal />

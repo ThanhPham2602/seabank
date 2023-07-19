@@ -1,9 +1,10 @@
 import React from "react";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import { Skeleton, Button } from "antd";
-import { ProFormSwitch } from "@ant-design/pro-components";
+import { Skeleton, Button, Switch } from "antd";
+
 import { EditOutlined } from "@ant-design/icons";
+import { HandleStatusChange } from "../service/status";
 function EditDrawer() {
   const { data, dispatch } = useContext(UserContext);
   const infor = data?.getUserById;
@@ -31,7 +32,7 @@ function EditDrawer() {
             style={{ width: "32px", height: "32px", padding: "0" }}
           /> */}
           <Button
-            key="editable"
+            key="editabledrawer"
             style={{ width: "32px", padding: "0" }}
             onClick={() => {
               dispatch({ type: "modalOpen", payload: infor?.usrUid });
@@ -39,10 +40,11 @@ function EditDrawer() {
             icon={<EditOutlined />}
           />
 
-          <ProFormSwitch
+          <Switch
             key={"switch"}
-            noStyle
-            initialValue={infor?.usrStatus}
+            defaultChecked={infor?.usrStatus === "ACTIVE"}
+            // checked={ === "ACTIVE"}
+            onChange={(checked) => HandleStatusChange(infor.usrUid, checked)}
           />
         </div>
       </div>
@@ -68,7 +70,7 @@ function EditDrawer() {
         <p>Nhóm nghiệp vụ: </p>
         <p>
           Nhóm:
-          {/* {`${"grpName"}`} */}
+          {`${infor?.grpName}`}
         </p>
         <p>Khu vực: </p>
         <p>Công việc: </p>

@@ -19,10 +19,12 @@ function EditModal() {
   console.log("object data", data);
   const infor = data?.getUserById;
   const SelectData = data?.getAllMDT?.TypeBusiness;
-  const SelectData2 = data?.getGroups;
+  const selectData2 = data?.getGroups;
   let check = data?.id;
+  console.log("selectdataa::", selectData2);
 
   const handleSubmit = async (value) => {
+    console.log("object value", value);
     // Thực hiện chức năng của nút "Submit" tại đây
     !check
       ? userApi
@@ -46,6 +48,7 @@ function EditModal() {
             dispatch({ type: "updateUser", payload: value });
             dispatch({ type: "modalClose" });
             console.log("object val", value);
+            console.log("object id", check);
             if (response?.data?.body?.status === "OK") {
               notification.success({
                 message: "Cập nhật người dùng thành công",
@@ -74,7 +77,7 @@ function EditModal() {
             const handleCancel = () => {
               // Thực hiện chức năng của nút "Cancel" tại đây
               dispatch({ type: "modalClose" });
-              dispatch({ type: "drawerClose" });
+              // dispatch({ type: "drawerClose" });
             };
 
             return (
@@ -165,7 +168,7 @@ function EditModal() {
 
           options={SelectData.map((value) => {
             return {
-              value: value.masterId,
+              value: value.code,
               label: value.name,
             };
           })}
@@ -180,10 +183,10 @@ function EditModal() {
           //   { label: "description", value: "defaultValue" },
           // ]}
           initialValue={infor}
-          options={SelectData2.map((value) => {
+          options={selectData2.map((value) => {
             return {
-              value: value.grpUid,
               label: value.grpName,
+              value: value.grpCode,
             };
           })}
           rules={[{ required: true, message: "Please select!" }]}

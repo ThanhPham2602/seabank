@@ -62,9 +62,13 @@ export const searchDataInfo = ({ params }) => ({
     pageSize: params.pageSize,
   },
   filterInfo: {
-    searchValue: "",
-    usrStatus: "ACTIVE",
-    usrRole: "",
+    searchValue: params.keyword,
+    usrUsername: params.usrUsername,
+    usrStatus: params.usrStatus,
+    usrEmail: params.usrEmail,
+    usrPhone: params.usrPhone,
+    grpCode: params.grpCode,
+    typeBusiness: params.code,
   },
   sortingInfo: {
     sortColumn: "usr_create_date",
