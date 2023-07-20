@@ -40,7 +40,7 @@ const reducer = (state, action) => {
       return { ...state, modalOpen: false };
 
     case "drawerOpen":
-      return { ...state, drawerOpen: true, userID: action.payload };
+      return { ...state, drawerOpen: true, infor: action.payload };
 
     case "drawerClose":
       return { ...state, drawerOpen: false, userID: null };

@@ -71,7 +71,7 @@ export const searchDataInfo = ({ params }) => ({
     typeBusiness: params.code,
   },
   sortingInfo: {
-    sortColumn: "usr_create_date",
-    direction: "desc",
+    // sortColumn: "usr_create_date",
+    // direction: "desc",
   },
 });

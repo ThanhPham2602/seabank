@@ -58,10 +58,23 @@ export const Columns = () => {
       render: (_, record) => (
         <Link
           onClick={() => {
-            dispatch({ type: "drawerOpen", payload: record.usrUid });
+            console.log("id column", record);
+            dispatch({ type: "drawerOpen", payload: record });
+            // userApi
+            //   .get(record.usrUid)
+            //   .then((response) => {
+            //     console.log("response", response);
+            //     dispatch({
+            //       type: "getUserById",
+            //       payload: response.data.body.dataRes,
+            //     });
+
+            //   })
+            //   .catch((error) => console.error(error));
           }}
         >
           {record.usrUsername}
+          {/* {console.log("object", record)} */}
         </Link>
       ),
     },
@@ -147,6 +160,7 @@ export const Columns = () => {
       request: async () => {
         const res = await masterDataApi.getGroups({ page: 1, pageSize: 10 });
         const data = res.data.body.dataRes.rows;
+        dispatch({ type: "getGroups", payload: data });
         // console.log("res:: ", res.data.body.dataRes.rows);
         return data.map((value) => ({
           label: value.grpName,
@@ -181,7 +195,9 @@ export const Columns = () => {
         // .catch((error) => console.error(error));
         // }
         const res = await masterDataApi.getAll();
+
         const data = res.data.body.dataRes.TypeBusiness;
+        dispatch({ type: "getAllMDT", payload: data });
         console.log("res:: ", data);
         return data.map((value) => ({
           label: value.name,
@@ -242,6 +258,16 @@ export const Columns = () => {
             onClick={() => {
               dispatch({ type: "modalOpen", payload: record.usrUid });
               dispatch({ type: "setUserID", payload: record.usrUid });
+              userApi
+                .get(record.usrUid)
+                .then((response) => {
+                  // console.log("object res", response.data.body.dataRes);
+                  dispatch({
+                    type: "getUserById",
+                    payload: response.data.body.dataRes,
+                  });
+                })
+                .catch((error) => console.error(error));
             }}
             icon={<EditOutlined />}
           />

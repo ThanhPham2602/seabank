@@ -9,20 +9,23 @@ const UserModal = () => {
   const { data, dispatch } = useContext(UserContext);
 
   const id = data.userID;
-  const check = data.id;
+  const checkID = data.id;
 
-  useEffect(() => {
-    userApi
-      .get(id)
-      .then((response) => {
-        // console.log("object res", response.data.body.dataRes);
-        dispatch({
-          type: "getUserById",
-          payload: response.data.body.dataRes,
-        });
-      })
-      .catch((error) => console.error(error));
-  }, [id]);
+  console.log("id: : ", id);
+  console.log("data: : ", data);
+  console.log("check: :", checkID);
+  // const HandleModal = async () => {
+  //   await userApi
+  //     .get(id)
+  //     .then((response) => {
+  //       // console.log("object res", response.data.body.dataRes);
+  //       dispatch({
+  //         type: "getUserById",
+  //         payload: response.data.body.dataRes,
+  //       });
+  //     })
+  //     .catch((error) => console.error(error));
+  // };
 
   const handleCancel = () => {
     dispatch({ type: "modalClose" });
@@ -32,10 +35,12 @@ const UserModal = () => {
   return (
     <>
       <Modal
+        // onClick={HandleModal}
+        loading={!checkID ? true : false}
         width={"800px"}
-        title={check ? "Cập nhật người dùng" : "Tạo mới người dùng"}
+        title={checkID ? "Cập nhật người dùng" : "Tạo mới người dùng"}
         open={data.modalOpen}
-        destroyOnClose
+        // destroyOnClose
         onCancel={handleCancel}
         footer={null}
       >

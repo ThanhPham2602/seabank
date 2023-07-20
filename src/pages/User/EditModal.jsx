@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   ProForm,
   ProFormTextArea,
@@ -18,10 +18,25 @@ function EditModal() {
 
   console.log("object data", data);
   const infor = data?.getUserById;
-  const SelectData = data?.getAllMDT?.TypeBusiness;
+  const SelectData = data?.getAllMDT;
   const selectData2 = data?.getGroups;
   let check = data?.id;
-  console.log("selectdataa::", selectData2);
+
+  useEffect(() => {
+    userApi
+      .get(check)
+      .then((response) => {
+        // console.log("object res", response.data.body.dataRes);
+        dispatch({
+          type: "getUserById",
+          payload: response.data.body.dataRes,
+        });
+      })
+      .catch((error) => console.error(error));
+  }, [check]);
+
+  // console.log("selectdataa::", selectData2);
+  // console.log("selectdataa1::", SelectData);
 
   const handleSubmit = async (value) => {
     console.log("object value", value);

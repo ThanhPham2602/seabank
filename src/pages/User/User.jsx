@@ -1,21 +1,10 @@
-import {
-  // EllipsisOutlined,
-  PlusOutlined,
-  SearchOutlined,
-  ReloadOutlined,
-  // EditOutlined,
-} from "@ant-design/icons";
-// import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import {
-  ProTable,
-  // TableDropdown,
-  // ProFormSwitch,
-  // Search,
-} from "@ant-design/pro-components";
-import { Button, Input } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+
+import { ProTable } from "@ant-design/pro-components";
+import { Button } from "antd";
 import { useRef, useContext } from "react";
 import { UserContext } from "./UserContext";
-// import axios from "axios";
+
 import { Columns } from "./columnUser";
 import { useEffect } from "react";
 import userApi from "../../Api/userApi";
@@ -27,34 +16,34 @@ const User = () => {
   const actionRef = useRef();
   const { data, dispatch } = useContext(UserContext);
 
-  useEffect(() => {
-    userApi
-      .getAll({ page: 1, pageSize: 10 })
-      .then((response) => {
-        // console.log("object res", response.data.body.dataRes.rows);
-        const data = response.data.body.dataRes.rows;
-        dispatch({ type: "getAllUser", payload: data });
-        // setData(newData)
-      })
-      .catch((error) => console.error(error));
-    masterDataApi
-      .getAll()
-      .then((response) => {
-        const data2 = response.data.body.dataRes;
-        console.log("object data2", data2);
-        dispatch({ type: "getAllMDT", payload: data2 });
-      })
-      .catch((error) => console.error(error));
+  // useEffect(() => {
+  //   userApi
+  //     .getAll({ page: 1, pageSize: 10 })
+  //     .then((response) => {
+  //       // console.log("object res", response.data.body.dataRes.rows);
+  //       const data = response.data.body.dataRes.rows;
+  //       dispatch({ type: "getAllUser", payload: data });
+  //       // setData(newData)
+  //     })
+  //     .catch((error) => console.error(error));
+  //   masterDataApi
+  //     .getAll()
+  //     .then((response) => {
+  //       const data2 = response.data.body.dataRes;
+  //       console.log("object data2", data2);
+  //       dispatch({ type: "getAllMDT", payload: data2 });
+  //     })
+  //     .catch((error) => console.error(error));
 
-    masterDataApi
-      .getGroups({ page: 1, pageSize: 10 })
-      .then((response) => {
-        const data3 = response.data.body.dataRes.rows;
-        console.log("object data3", data3);
-        dispatch({ type: "getGroups", payload: data3 });
-      })
-      .catch((error) => console.error(error));
-  }, []);
+  //   masterDataApi
+  //     .getGroups({ page: 1, pageSize: 10 })
+  //     .then((response) => {
+  //       const data3 = response.data.body.dataRes.rows;
+  //       console.log("object data3", data3);
+  //       dispatch({ type: "getGroups", payload: data3 });
+  //     })
+  //     .catch((error) => console.error(error));
+  // }, []);
 
   return (
     <>
@@ -81,7 +70,7 @@ const User = () => {
           const response = await userApi.getAll(filtersData);
           const data = response?.data?.body?.dataRes;
           dispatch({ type: "getAllUser", payload: data });
-          // console.log("object datareturn", data);
+
           return { data: data, success: true };
         }}
         scroll={{ x: "1000px" }}
@@ -109,34 +98,7 @@ const User = () => {
         }}
         dateFormatter="string"
         headerTitle="Danh sách người dùng"
-        // toolBarRender={() => [
-        //   <Input.Search
-        //     key="search"
-        //     placeholder="Nhập từ khóa"
-        //     onSearch={handleSearch}
-        //   />,
-        //   <Button
-        //     key="button"
-        //     icon={<PlusOutlined />}
-        //     onClick={() => {
-        //       dispatch({ type: "modalOpen" });
-        //     }}
-        //     type="primary"
-        //   >
-        //     Tạo người dùng
-        //   </Button>,
-        // ]}
-
         toolbar={{
-          // search: {
-          //   placeholder: "Nhập từ khóa để tìm kiếm...",
-          //   style: {
-          //     width: "200px",
-          //   },
-          // onSearch: (value) => {
-          //   handleSearch(value);
-          // },
-          // },
           actions: [
             <Button
               key="button"

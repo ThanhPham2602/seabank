@@ -5,11 +5,9 @@ import { Skeleton, Button, Switch } from "antd";
 
 import { EditOutlined } from "@ant-design/icons";
 import { HandleStatusChange } from "../service/status";
-function EditDrawer() {
+function EditDrawer({ infor }) {
   const { data, dispatch } = useContext(UserContext);
-  const infor = data?.getUserById;
-  console.log("object info", infor);
-
+  console.log("infor", infor);
   return (
     <Skeleton loading={!infor ? true : false}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -36,6 +34,9 @@ function EditDrawer() {
             style={{ width: "32px", padding: "0" }}
             onClick={() => {
               dispatch({ type: "modalOpen", payload: infor?.usrUid });
+              dispatch({ type: "setUserID", payload: infor?.usrUid });
+              console.log("state", data);
+              console.log("rec", infor);
             }}
             icon={<EditOutlined />}
           />
