@@ -6,17 +6,33 @@ import React, { createContext, useReducer } from "react";
 export const UserContext = createContext();
 
 const initialData = {
+  getAllUser: {},
   modalOpen: false,
   drawerOpen: false,
   userID: null,
-  // setSttActive: true,
+
+  // loadingChecked: false,
 };
 const reducer = (state, action) => {
-  // console.log("object payload", action.payload);
   // console.log("object state", state);
   switch (action.type) {
-    case "getAllUser":
-      return { ...state, getAllUser: action.payload };
+    // case "getAllUser":
+    //   return { ...state, getAllUser: action.payload };
+    case "getAllUser": {
+      const def = action.payload?.rows;
+
+      let newRowsWithLoading = def.map((item) => ({
+        ...item,
+        loading: false,
+      }));
+      return {
+        ...state,
+        getAllUser: {
+          ...action.payload,
+          rows: newRowsWithLoading,
+        },
+      };
+    }
 
     case "getUserById":
       return { ...state, getUserById: action.payload };
@@ -53,6 +69,37 @@ const reducer = (state, action) => {
 
     case "getGroups":
       return { ...state, getGroups: action.payload };
+
+    case "loadingChecked": {
+      // const abd = { ...state, loading: action.payload };
+      console.log("abd", action.payload);
+
+      const ind = state?.getAllUser?.rows.findIndex(
+        (item) => item.usrUid === action.payload
+      );
+      const List = [...state?.getAllUser?.rows];
+      List[ind] = {
+        ...List[ind],
+        loading: !List[ind].loading,
+      };
+
+      // const loadingCheck = state?.getAllUser?.rows.map((item) =>
+      //   item.usrUid === action.payload
+      //     ? { ...item, loading: !item.loading }
+      //     : item
+      // );
+
+      return {
+        ...state,
+        getAllUser: {
+          ...state.getAllUser,
+          rows: List,
+        },
+      };
+    }
+
+    case "updateUserStatus":
+      return { ...state, updateStatus: action.payload };
 
     default:
       return state;

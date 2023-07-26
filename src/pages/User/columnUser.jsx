@@ -1,14 +1,14 @@
 import { EditOutlined } from "@ant-design/icons";
 import masterDataApi from "../../Api/MasterDataApi";
 import Link from "antd/es/typography/Link";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import { Badge, Button, notification, Switch } from "antd";
 import userApi from "../../Api/userApi";
 
 export const Columns = () => {
   const { data, dispatch } = useContext(UserContext);
-  // console.log("object data", data);
+  console.log("object data", data);
   // const UserList = data.getAllUser;
 
   // const groupName = data?.getGroups;
@@ -19,14 +19,18 @@ export const Columns = () => {
 
   const handleStatusChange = (usrUid, checked) => {
     const newStatus = checked ? "ACTIVE" : "INACTIVE";
-
+    // console.log("object data", data);
+    dispatch({ type: "loadingChecked", payload: usrUid });
+    console.log("newStatus", checked);
     userApi
       .inActiveUser(usrUid, newStatus)
       .then((response) => {
         dispatch({
           type: "inActiveUser",
         });
+
         if (response?.data?.body?.status === "OK") {
+          dispatch({ type: "updateUserStatus", payload: checked });
           notification.success({
             message: "Cập nhật thành công",
           });
@@ -35,8 +39,16 @@ export const Columns = () => {
             message: "Cập nhật không thành công",
           });
         }
+        dispatch({ type: "loadingChecked", payload: usrUid });
+
+        // console.log("data: : sạdasd", data);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        notification.error({
+          message: "Lỗi mạng",
+        });
+      });
   };
 
   return [
@@ -198,7 +210,7 @@ export const Columns = () => {
 
         const data = res.data.body.dataRes.TypeBusiness;
         dispatch({ type: "getAllMDT", payload: data });
-        console.log("res:: ", data);
+        // console.log("res:: ", data);
         return data.map((value) => ({
           label: value.name,
           value: value.code,
@@ -271,11 +283,13 @@ export const Columns = () => {
             }}
             icon={<EditOutlined />}
           />
-
+          {console.log(" record ", record.loading)}
           <Switch
             key="switch"
             defaultChecked={record.usrStatus === "ACTIVE"}
-            // checked={ === "ACTIVE"}
+            // checked={}
+            loading={record.loading}
+            // onClick={console.log("object record", record)}
             onChange={(checked) => handleStatusChange(record.usrUid, checked)}
           />
         </div>,

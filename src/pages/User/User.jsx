@@ -53,8 +53,8 @@ const User = () => {
         cardBordered
         dataSource={data.getAllUser?.rows}
         request={async (params, sort, filter) => {
-          console.log("object params", params);
-          console.log("object filter", filter);
+          // console.log("object params", params);
+          // console.log("object filter", filter);
           const filtersData = {
             keyword: params.keyword,
             page: params.current,
@@ -105,7 +105,7 @@ const User = () => {
               style={{ backgroundColor: "#FF4D4F" }}
               icon={<PlusOutlined />}
               onClick={() => {
-                dispatch({ type: "modalOpen" });
+                dispatch({ type: "modalOpen", payload: null });
               }}
               type="primary"
             >

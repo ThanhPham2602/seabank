@@ -8,7 +8,7 @@ function DrawerUser() {
   const { data, dispatch } = useContext(UserContext);
 
   const id = data?.infor;
-  console.log("object idDrawe", id);
+  // console.log("object idDrawe", id);
 
   const onClose = () => {
     dispatch({ type: "drawerClose" });

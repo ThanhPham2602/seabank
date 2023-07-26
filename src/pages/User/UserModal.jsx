@@ -11,9 +11,9 @@ const UserModal = () => {
   const id = data.userID;
   const checkID = data.id;
 
-  console.log("id: : ", id);
-  console.log("data: : ", data);
-  console.log("check: :", checkID);
+  // console.log("id: : ", id);
+  // console.log("data: : ", data);
+  // console.log("check: :", checkID);
   // const HandleModal = async () => {
   //   await userApi
   //     .get(id)
@@ -36,11 +36,11 @@ const UserModal = () => {
     <>
       <Modal
         // onClick={HandleModal}
-        loading={!checkID ? true : false}
+        // loading={!checkID ? true : false}
         width={"800px"}
         title={checkID ? "Cập nhật người dùng" : "Tạo mới người dùng"}
         open={data.modalOpen}
-        // destroyOnClose
+        destroyOnClose
         onCancel={handleCancel}
         footer={null}
       >
