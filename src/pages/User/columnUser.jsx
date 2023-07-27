@@ -34,6 +34,7 @@ export const Columns = () => {
           notification.success({
             message: "Cập nhật thành công",
           });
+          console.log("object checked", checked);
         } else {
           notification.error({
             message: "Cập nhật không thành công",
@@ -283,7 +284,6 @@ export const Columns = () => {
             }}
             icon={<EditOutlined />}
           />
-          {console.log(" record ", record.loading)}
           <Switch
             key="switch"
             defaultChecked={record.usrStatus === "ACTIVE"}

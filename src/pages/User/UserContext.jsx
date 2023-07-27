@@ -70,18 +70,20 @@ const reducer = (state, action) => {
     case "getGroups":
       return { ...state, getGroups: action.payload };
 
-    case "loadingChecked": {
+    case "loadingChecked":
       // const abd = { ...state, loading: action.payload };
       console.log("abd", action.payload);
 
       const ind = state?.getAllUser?.rows.findIndex(
         (item) => item.usrUid === action.payload
       );
+
       const List = [...state?.getAllUser?.rows];
       List[ind] = {
         ...List[ind],
         loading: !List[ind].loading,
       };
+      console.log("object List[ind]", !List[ind].loading);
 
       // const loadingCheck = state?.getAllUser?.rows.map((item) =>
       //   item.usrUid === action.payload
@@ -96,7 +98,6 @@ const reducer = (state, action) => {
           rows: List,
         },
       };
-    }
 
     case "updateUserStatus":
       return { ...state, updateStatus: action.payload };

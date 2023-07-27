@@ -7,32 +7,39 @@ const useHandleStatusChange = (usrUid, checked) => {
   // console.log("usrUid: :", usrUid);
   // console.log("checked: :", checked);
 
-  // const newStatus = checked ? "ACTIVE" : "INACTIVE";
-  // const { data, dispatch } = useContext(UserContext);
+  const newStatus = checked ? "ACTIVE" : "INACTIVE";
+  const { data, dispatch } = useContext(UserContext);
   console.log(123);
   // const [isOnline, setIsOnline] = useState(true);
   useEffect(() => {
-    // const updateUserStatus = () => {
-    //   userApi
-    //     .inActiveUser(usrUid, newStatus)
-    //     .then((response) => {
-    //       dispatch({
-    //         type: "inActiveUser",
-    //       });
-    //       if (response?.data?.body?.status === "OK") {
-    //         notification.success({
-    //           message: "Cập nhật thành công",
-    //         });
-    //       } else {
-    //         notification.error({
-    //           message: "Cập nhật không thành công",
-    //         });
-    //       }
-    //     })
-    //     .catch((error) => console.error(error));
-    // };
-    // return updateUserStatus();
+    userApi
+      .inActiveUser(usrUid, newStatus)
+      .then((response) => {
+        dispatch({
+          type: "inActiveUser",
+        });
+
+        if (response?.data?.body?.status === "OK") {
+          dispatch({ type: "updateUserStatus", payload: checked });
+          notification.success({
+            message: "Cập nhật thành công",
+          });
+        } else {
+          notification.error({
+            message: "Cập nhật không thành công",
+          });
+        }
+        dispatch({ type: "loadingChecked", payload: usrUid });
+
+        // console.log("data: : sạdasd", data);
+      })
+      .catch((error) => {
+        console.error(error);
+        notification.error({
+          message: "Lỗi mạng",
+        });
+      });
   }, []);
-  // return isOnline
+  return { checked };
 };
 export default useHandleStatusChange;

@@ -22,7 +22,7 @@ function DrawerUser() {
         // destroyOnClose={true}
         open={data.drawerOpen}
       >
-        <EditDrawer infor={id} />
+        <EditDrawer infor={id} id={data?.infor?.ursUid} />
       </Drawer>
     </div>
   );

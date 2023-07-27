@@ -5,11 +5,11 @@ import { Skeleton, Button, Switch } from "antd";
 
 import { EditOutlined } from "@ant-design/icons";
 import useHandleStatusChange from "../service/status";
-function EditDrawer({ infor }) {
+function EditDrawer({ infor, id }) {
   const { data, dispatch } = useContext(UserContext);
   console.log("infor", infor);
 
-  const handleStatusChange = useHandleStatusChange();
+  // const { handleStatusChange } = useHandleStatusChange();
   return (
     <Skeleton loading={!infor ? true : false}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -47,7 +47,7 @@ function EditDrawer({ infor }) {
             key={"switch"}
             defaultChecked={infor?.usrStatus === "ACTIVE"}
             // checked={ === "ACTIVE"}
-            onChange={handleStatusChange}
+            // onChange={handleStatusChange}
           />
         </div>
       </div>
